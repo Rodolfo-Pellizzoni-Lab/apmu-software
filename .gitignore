@@ -1,0 +1,15 @@
+# Generated build products (the known-good copies live in */prebuilt/, which is tracked)
+*.o
+*.dump
+*.slm
+*.riscv
+pmu_firmware.asm
+mempol/text_section.bin
+mempol/data_rodata_bss.bin
+mempol/pmu_firmware/build/
+sad_profile/text_section.bin
+sad_profile/data_rodata_bss.bin
+sad_profile/auto_func_addrs.h
+
+# Known-good binaries from the verified sessions are tracked
+!*/prebuilt/**
