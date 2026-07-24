@@ -1,4 +1,10 @@
-# APMU Software 
+# APMU Software
+
+Bare-metal software for the case studies in our **EMSOFT 2026** paper, *"A Centralized
+Performance Monitoring Architecture for Heterogeneous Multicore SoCs."* These programs run
+on the [he-soc](https://github.com/Rodolfo-Pellizzoni-Lab/he-soc) SoC — a quad-core CVA6
+platform extended with our APMU / EVU / SPU monitoring infrastructure — on a Xilinx VCU118
+board, and were used to produce the paper's results.
 
 | Folder | Experiment |
 |---|---|
@@ -88,3 +94,31 @@ the APMU firmware records cycles and event counts between each entry and exit.
    first `ret` from the disassembly).
 2. Rebuild with `make two-pass fpga=1` — it re-extracts addresses and rebuilds
    the firmware to match.
+
+## License
+
+The software we wrote for this artifact — the APMU firmware (`*/pmu_firmware/`), the
+CVA6-side harnesses (`pmu_bench.c`, `pmu_test_func.c`), the profiling glue, and the build
+scripts — is released under the **MIT License** (see [`LICENSE`](./LICENSE)).
+
+Vendored third-party components keep their own upstream licenses:
+
+- **`inc/`** — PULP / AlSaqr platform drivers and headers, © ETH Zurich / University of
+  Bologna, under the **Apache License 2.0** (see the per-file headers).
+- **`sad_profile/sdvb/`** — the **SD-VBS** (San Diego Vision Benchmark Suite) disparity
+  kernel, © UC San Diego, under its original SD-VBS license.
+- The `mempol/` policing firmware **adapts the published _mempol_ memory-bandwidth
+  regulation approach**; the implementation in this repository is our own.
+
+## Citation
+
+If you use this software, please cite the paper:
+
+```bibtex
+@inproceedings{jafri2026centralized,
+  author    = {Jafri, Mohammed Sajjad and Rahman, Abdur and Sarkar, Emon and Hassen, Mahdi and Thayyil, Gopishankar and Mani, Ashwin Krishna and Pellizzoni, Rodolfo},
+  title     = {A Centralized Performance Monitoring Architecture for Heterogeneous Multicore SoCs},
+  booktitle = {Proc. ACM SIGBED International Conference on Embedded Software (EMSOFT)},
+  year      = {2026}
+}
+```
