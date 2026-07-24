@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 #ifndef QUEUE_LIB_H
 #define QUEUE_LIB_H
 

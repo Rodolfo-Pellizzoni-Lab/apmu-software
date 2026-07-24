@@ -1,4 +1,9 @@
 /*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
+/*
  * PMU Firmware - Mempol implementation
  
  PMU here uses a modified mempol algorithm to police

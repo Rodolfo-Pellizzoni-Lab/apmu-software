@@ -1,4 +1,9 @@
 /*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
+/*
  * PMU Interrupt Test with PLIC
  *
  * Test flow:

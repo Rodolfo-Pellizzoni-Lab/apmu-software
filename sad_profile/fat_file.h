@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 #ifndef FAT_FILE_H
 #define FAT_FILE_H
 

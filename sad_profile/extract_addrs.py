@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 University of Waterloo
+
 """
 Extract profiled function entry and first-ret addresses from a .dump file.
 Usage: python3 extract_addrs.py [path/to/pmu_bench.dump]

@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 /* bare_math.c — software math stubs for bare-metal SIFT
  *
  * Provides exp, pow, expf, log2f (and helpers) so the linker does not pull

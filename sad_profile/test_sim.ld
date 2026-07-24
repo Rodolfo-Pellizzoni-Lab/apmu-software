@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 /*======================================================================*/
 /* Proxy kernel linker script - with embedded FAT image for simulation  */
 /*======================================================================*/

@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 #include <stddef.h>
 #include <string.h>
 #include <stdarg.h>

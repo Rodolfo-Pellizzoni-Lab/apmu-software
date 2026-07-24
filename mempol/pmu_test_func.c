@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 #include "pmu_test_func.h"
 
 uint32_t S_to_binary_(const char *s) {

@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 /// This assumes the following: 
 ///   1. The PMU counters (including the initial budget registers) are 32-bit with 
 ///      the 31st bit reserved for Pending.

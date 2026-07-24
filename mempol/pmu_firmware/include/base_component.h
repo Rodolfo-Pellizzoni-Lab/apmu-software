@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 #ifndef __BASE_COMPONENT_H__
 #define __BASE_COMPONENT_H__
 #include <stdint.h>

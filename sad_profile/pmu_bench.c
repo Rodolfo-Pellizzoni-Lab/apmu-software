@@ -1,4 +1,9 @@
 /*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
+/*
  * PMU computeSAD Single-Function Profiler — Solo vs Interference
  *
  * Runs disparity benchmark twice:

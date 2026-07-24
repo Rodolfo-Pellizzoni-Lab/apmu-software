@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 /* Wrapper to embed PMU data section binary */
 .section .rodata
 .global _binary_data_rodata_bss_bin_start

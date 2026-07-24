@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 #ifndef __EVENTS_H__
 #define __EVENTS_H__
 #include <stddef.h>

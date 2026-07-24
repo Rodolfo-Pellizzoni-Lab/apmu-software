@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 #include "pmu_defines.h"
 #include "riscv_encoder_instr.c"
 

@@ -1,4 +1,9 @@
 /*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
+/*
  * PMU Firmware - computeSAD Single-Function Profiler
  *
  * Uses 1 PC milestone slot (slot 0), reprogrammed each hit:

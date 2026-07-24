@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 /* Embed reduced FAT image at 0x82000000 for simulation */
 .section .fat_image, "a", @progbits
 .global _fat_image_start

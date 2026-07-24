@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 uint32_t encodeLUI (uint32_t rd, uint32_t imm, uint32_t DEBUG) {
     uint32_t instruction = 0;
     uint32_t opcode = 0x37;

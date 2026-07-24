@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 University of Waterloo
+ */
+
 #ifndef __PMU_HW_DESC_H__
 #define __PMU_HW_DESC_H__
 
