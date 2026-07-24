@@ -95,6 +95,15 @@ the APMU firmware records cycles and event counts between each entry and exit.
 2. Rebuild with `make two-pass fpga=1` — it re-extracts addresses and rebuilds
    the firmware to match.
 
+## Artifact evaluation
+
+This repository is part of the **EMSOFT 2026 artifact** (we apply for the **Artifacts
+Available** badge). The artifact-evaluation documents are under [`docs/`](./docs/):
+
+- [`docs/STATUS.md`](./docs/STATUS.md) — the badge we apply for and the reasons why.
+- [`docs/REQUIREMENTS.md`](./docs/REQUIREMENTS.md) — hardware and software needed, including the **GCC 15.1.0** board toolchain used for the paper's experiments.
+- [`docs/INSTALL.md`](./docs/INSTALL.md) — clone → build → load on the board → expected output.
+
 ## License
 
 The software we wrote for this artifact — the APMU firmware (`*/pmu_firmware/`), the
