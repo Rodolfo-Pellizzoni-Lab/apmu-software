@@ -105,6 +105,7 @@ Available** badge). The artifact-evaluation documents are under [`docs/`](./docs
 - [`docs/STATUS.md`](./docs/STATUS.md) — the badge we apply for and the reasons why.
 - [`docs/REQUIREMENTS.md`](./docs/REQUIREMENTS.md) — hardware and software needed, including the **GCC 15.1.0** board toolchain used for the paper's experiments.
 - [`docs/INSTALL.md`](./docs/INSTALL.md) — clone → build → load on the board → expected output.
+- [`docs/Supplementary_Material_EMSOFT.pdf`](./docs/Supplementary_Material_EMSOFT.pdf) — supplementary material: the design specification for our monitoring IPs (APMU / SPU / CVA6-EVU).
 
 ## License
 
