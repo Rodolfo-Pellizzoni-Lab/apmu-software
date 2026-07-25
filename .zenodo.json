@@ -1,0 +1,16 @@
+{
+  "title": "APMU Software — bare-metal case-study software (EMSOFT 2026 artifact)",
+  "upload_type": "software",
+  "creators": [
+    {"name": "Jafri, Mohammed Sajjad", "affiliation": "University of Waterloo"},
+    {"name": "Rahman, Abdur", "affiliation": "University of Waterloo"},
+    {"name": "Sarkar, Emon", "affiliation": "University of Waterloo"},
+    {"name": "Hassen, Mahdi", "affiliation": "University of Waterloo"},
+    {"name": "Thayyil, Gopishankar", "affiliation": "University of Waterloo"},
+    {"name": "Mani, Ashwin Krishna", "affiliation": "University of Waterloo"},
+    {"name": "Pellizzoni, Rodolfo", "affiliation": "University of Waterloo"}
+  ],
+  "license": "MIT",
+  "version": "1.0",
+  "description": "Bare-metal software for the case studies in the EMSOFT 2026 paper 'A Centralized Performance Monitoring Architecture for Heterogeneous Multicore SoCs,' run on the he-soc SoC on a Xilinx VCU118 board. The software we author is released under the MIT License; vendored third-party components retain their upstream licenses (SD-VBS / San Diego Vision Benchmark Suite (c) UC San Diego; PULP/AlSaqr board-support (c) ETH Zurich, Apache-2.0; RISC-V riscv-tests (c) UC Berkeley, BSD). Active development continues at https://github.com/Rodolfo-Pellizzoni-Lab/apmu-software"
+}
