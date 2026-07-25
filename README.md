@@ -6,6 +6,8 @@ on the [he-soc](https://github.com/Rodolfo-Pellizzoni-Lab/he-soc) SoC — a quad
 platform extended with our APMU / EVU / SPU monitoring infrastructure — on a Xilinx VCU118
 board, and were used to produce the paper's results.
 
+> **Artifact evaluation (EMSOFT 2026).** Active development of this artifact continues in this GitHub repository: https://github.com/Rodolfo-Pellizzoni-Lab/apmu-software.
+
 | Folder | Experiment |
 |---|---|
 | `mempol/` | Memory-bandwidth policing: the APMU core interrupts and halts a CVA6 core when it exceeds its bandwidth budget, and resumes it when the budget refills |
