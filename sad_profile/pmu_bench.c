@@ -341,6 +341,13 @@ void thread_entry(int cid, int nc) {
     return;
 }
 
+static void copy_words(void *dst, const void *src, uint32_t size) {
+    volatile uint32_t *d = (volatile uint32_t *)dst;
+    const uint32_t *s = (const uint32_t *)src;
+    for (uint32_t i = 0; i < (size + 3) / 4; i++)
+        d[i] = s[i];
+}
+
 // *********************************************************************
 // Helper: load firmware, start PMU, wait for ready
 // *********************************************************************
@@ -362,10 +369,21 @@ void load_and_start_pmu(void) {
         write_32b(DSPM_BASE_ADDR + i, 0);
     }
 
-    // Load firmware
-    memcpy((void*)ISPM_BASE_ADDR, _binary_text_section_bin_start, text_size);
-    memcpy((void*)(DSPM_BASE_ADDR + 0x200), _binary_data_rodata_bss_bin_start, data_size);
+    // Load firmware with 32-bit word stores only. The ISPM/DSPM SRAMs index by byte address and
+    // ignore byte strobes, so the byte stores memcpy uses for a tail that is not 8-byte aligned
+    // (this image is 2292 bytes) land in the wrong entries: the last instruction of the firmware,
+    // the polling loop's back-edge, became `j .` and no call was ever logged.
+    copy_words((void*)ISPM_BASE_ADDR, _binary_text_section_bin_start, text_size);
+    copy_words((void*)(DSPM_BASE_ADDR + 0x200), _binary_data_rodata_bss_bin_start, data_size);
     asm volatile ("fence iorw, iorw" ::: "memory");
+    {
+        const volatile uint32_t *d = (const volatile uint32_t *)ISPM_BASE_ADDR;
+        const uint32_t *src = (const uint32_t *)_binary_text_section_bin_start;
+        uint32_t bad = 0;
+        for (uint32_t i = 0; i < (text_size + 3) / 4; i++)
+            if (d[i] != src[i]) bad++;
+        printf("    ISPM read-back: %u of %u words differ from the image\r\n", bad, (text_size + 3) / 4);
+    }
 
     // Boot PMU
     write_32b(PMC_BOOT_ADDR, ISPM_BASE_ADDR);
@@ -824,18 +842,18 @@ int main(int argc, char const *argv[]) {
         printf("COMPARISON: Solo vs Interference\r\n");
         printf("========================================\r\n");
 
-        printf("    %-12s %10s %10s %10s\r\n", "", "Solo", "Interf", "Delta%%");
+        printf("    %-12s %10s %10s %10s\r\n", "", "Solo", "Interf", "Delta%");
 
         #define CMP(label, s, i) do { \
             int32_t pct = (s) > 0 ? (int32_t)(((int64_t)(i) - (int64_t)(s)) * 100 / (int64_t)(s)) : 0; \
-            printf("    %-12s %10u %10u %+9d%%\r\n", label, (s), (i), pct); \
+            printf("    %-12s %10u %10u   %c%d%%\r\n", label, (s), (i), pct < 0 ? '-' : '+', pct < 0 ? -pct : pct); \
         } while(0)
 
         CMP("PMU Cycles",  solo.cyc_disp,  intrf.cyc_disp);
         CMP("Calls",       solo.call_count, intrf.call_count);
 
         printf("\r\n    --- Totals ---\r\n");
-        printf("    %-12s %10s %10s %10s\r\n", "", "Solo", "Interf", "Delta%%");
+        printf("    %-12s %10s %10s %10s\r\n", "", "Solo", "Interf", "Delta%");
         CMP("Cycles",   solo.tot_cyc,   intrf.tot_cyc);
         CMP("Branch",   solo.tot_l1,    intrf.tot_l1);
         CMP("L1DAcc",   solo.tot_stall, intrf.tot_stall);
@@ -848,7 +866,7 @@ int main(int argc, char const *argv[]) {
 
         if (solo.call_count > 0 && intrf.call_count > 0) {
             printf("\r\n    --- Averages (per call) ---\r\n");
-            printf("    %-12s %10s %10s %10s\r\n", "", "Solo", "Interf", "Delta%%");
+            printf("    %-12s %10s %10s %10s\r\n", "", "Solo", "Interf", "Delta%");
             CMP("AvgCycles", solo.tot_cyc/solo.call_count,   intrf.tot_cyc/intrf.call_count);
             CMP("AvgBranch", solo.tot_l1/solo.call_count,    intrf.tot_l1/intrf.call_count);
             CMP("AvgL1DAcc", solo.tot_stall/solo.call_count, intrf.tot_stall/intrf.call_count);

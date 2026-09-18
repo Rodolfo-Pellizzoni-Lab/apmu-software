@@ -12,6 +12,7 @@ board, and were used to produce the paper's results.
 |---|---|
 | `mempol/` | Memory-bandwidth policing: the APMU core interrupts and halts a CVA6 core when it exceeds its bandwidth budget, and resumes it when the budget refills |
 | `sad_profile/` | EVU PC-milestone profiling of function entry & exit: per-call cycle/event profiles of `padarray4` inside the SD-VBS disparity (SAD) benchmark |
+| `evu_test/` | Self-checking EVU smoke test (core 0 only, ~6 ms of simulated time): PC-track milestones on a small function, counted by APMU counters 20/21 and logged by the `sad_profile` firmware; exit code 0 = PASS |
 
 Each experiment's main code is in the following files:
 
@@ -96,6 +97,54 @@ the APMU firmware records cycles and event counts between each entry and exit.
    first `ret` from the disassembly).
 2. Rebuild with `make two-pass fpga=1` — it re-extracts addresses and rebuilds
    the firmware to match.
+
+## Demo: running the three programs on the VCU118
+
+From an `alsaqr-software` checkout (toolchains, OpenOCD, GDB and the bitstreams live there):
+
+```bash
+APMU=$(pwd)                       # this checkout, with the three programs built (fpga=1)
+cd ~/alsaqr-software && source source.sh
+make load_bitstream BITSTREAM=bitstreams/alsaqr_xilinx_50MHz.bit HW_TARGET=xilinx_tcf/Digilent/210308B3AC77
+# wait ~30 s for DDR calibration; if the first attach fails with "IR capture error", run it again
+./scripts/load.sh $APMU/evu_test/evu_test.riscv     --time 3000   --batch --serial-log evu.log
+./scripts/load.sh $APMU/sad_profile/pmu_bench.riscv --time 60000  --batch --serial-log sad.log
+./scripts/load.sh $APMU/mempol/pmu_bench.riscv      --time 120000 --batch --serial-log mempol.log
+```
+
+`--serial-log` records `/dev/ttyUSB3` at 38400 (the UART is hardwired to that rate in the bitstream; the
+programs only set 8N1 and never touch the divisor). What to expect: `=== EVU TEST PASS ===`; sad_profile
+prints 8 `padarray4` calls per pass with milestone counters 20/21 at 8 and a per-call table, the interference
+pass several times slower; mempol prints the stage timings, the pause/resume interrupt counts and the mempol
+log as CSV. Reference results (50 MHz bitstream, 2026-09-18): sad_profile solo about 113k cycles per call,
+about 446k under interference; mempol about 900 pause/resume interrupts over 30 iterations.
+
+## EVU smoke test: `evu_test/`
+
+A quick check that the CVA6 EVU, the APMU counters and the `sad_profile` firmware still work
+together, small enough for the he-soc xsim RTL simulation (about 6 ms of simulated time; on the
+board it runs in an instant). It arms PCTRACK0/1 on the entry and the first `ret` of `evu_probe()`,
+counts the milestone hits in counters 20/21, calls the function `N_CALLS` (16) times and checks
+the two counters and the firmware's per-call log against that number. The verdict goes to the
+UART and to `tohost` (exit code 0 = PASS).
+
+```bash
+cd evu_test
+make clean
+make two-pass                # or fpga=1 for the board; N_CALLS=<n> to change the call count
+```
+
+Firmware loading note (all three programs): the firmware image is copied into the ISPM with 32-bit
+word stores, and `evu_test`/`sad_profile` read it back and report mismatches. `memcpy` may finish an
+image whose size is not a multiple of 8 (the `sad_profile` firmware is 2292 bytes) with byte stores,
+and the ISPM/DSPM SRAMs index by byte address without honouring byte strobes, so those bytes land
+in the wrong entries: the last instruction of the firmware, the polling loop's back-edge, became
+`j .` and the firmware never logged a call. This was reproduced both in the he-soc xsim simulation
+and on the 50 MHz bitstream; the RTL fix belongs in `ip_list/apmu/src/pmu_ispm.sv`.
+
+Per-call cycle counts from the polling firmware have a resolution of roughly one poll iteration
+(about 80 cycles, two AXI-Lite counter reads); calls shorter than that, or several calls within
+one iteration, are reported as the poll overhead. The milestone counters themselves are exact.
 
 ## Artifact evaluation
 

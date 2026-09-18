@@ -506,6 +506,13 @@ void thread_entry(int cid, int nc) {
 // *********************************************************************
 // Main Function
 // *********************************************************************
+static void copy_words(void *dst, const void *src, uint32_t size) {
+    volatile uint32_t *d = (volatile uint32_t *)dst;
+    const uint32_t *s = (const uint32_t *)src;
+    for (uint32_t i = 0; i < (size + 3) / 4; i++)
+        d[i] = s[i];
+}
+
 int main(int argc, char const *argv[]) {
 
     uint32_t mhartid;
@@ -579,8 +586,11 @@ int main(int argc, char const *argv[]) {
 
         // Load firmware
         if (text_size > 0 && text_size < 4096) {
-            memcpy((void*)ISPM_BASE_ADDR, _binary_text_section_bin_start, text_size);
-            memcpy((void*)(DSPM_BASE_ADDR + 0x200), _binary_data_rodata_bss_bin_start, data_size);
+            // 32-bit word stores only: the ISPM/DSPM SRAMs index by byte address and ignore byte strobes, so
+            // memcpy's byte-store tail for an image that is not 8-byte aligned corrupts the last words
+            // (this bit sad_profile, whose firmware is 2292 bytes).
+            copy_words((void*)ISPM_BASE_ADDR, _binary_text_section_bin_start, text_size);
+            copy_words((void*)(DSPM_BASE_ADDR + 0x200), _binary_data_rodata_bss_bin_start, data_size);
             asm volatile ("fence iorw, iorw" ::: "memory");
             printf("    Firmware loaded (text=%u, data=%u bytes)\r\n", text_size, data_size);
         } else {

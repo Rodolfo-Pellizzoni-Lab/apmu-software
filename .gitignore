@@ -10,6 +10,9 @@ mempol/pmu_firmware/build/
 sad_profile/text_section.bin
 sad_profile/data_rodata_bss.bin
 sad_profile/auto_func_addrs.h
+evu_test/text_section.bin
+evu_test/data_rodata_bss.bin
+evu_test/auto_func_addrs.h
 
 # Known-good binaries from the verified sessions are tracked
 !*/prebuilt/**
